@@ -26,6 +26,9 @@ router.route("/complaint").post( authenticateToken ,postComplaint); // route to 
 router.route("/complaint/all").get( authenticateToken ,getAllComplaint); // route to get complaint
 router.route("/complaint/user/:id").get( authenticateToken ,getComplaintByUserId); // get complaint by user id
 
+// Drive route
+router.route("/drive").post( authenticateToken ,createDrive); // create drive
+
 // Authentication routes
 router.route("/login").post(login);
 router.route("/signup").post(signup);

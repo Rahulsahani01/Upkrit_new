@@ -30,46 +30,38 @@ const AccountSchema = new mongoose.Schema({
   password: { type: String, required: true, trim: true },
 });
 
-// const DriveSchema = new mongoose.Schema({
-//   username: { type: String, required: true, trim: true },
-//   type: { type: String, required: true, trim: true },
-//   date: { type: Date },
-//   abstract: { type: String, required: true, trim: true },
-//   location: { type: String, required: true, trim: true },
-// });
+const DriveSchema = new mongoose.Schema({
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Account', required: true }, // Reference to Account schema
+  type: { type: String, required: true, trim: true },
+  date: { type: Date },
+  abstract: { type: String, required: true, trim: true },
+  location: { type: String, required: true, trim: true },
+});
 
 // Models
 const Complaint = mongoose.model("Complaint", complaintSchema);
 const Account = mongoose.model("Account", AccountSchema);
+const Drive = mongoose.model("Drive", DriveSchema);
 
 const driveHandler = async (data, res) => {
   try {
     // Validate required fields
-    const { username, type, abstract, location } = data;
-    if (!username || !type || !abstract || !location) {
+    const { user_id, type, abstract, location } = data;
+    if (!user_id || !type || !abstract || !location) {
       return res.status(400).json({ message: "All fields are required" });
     }
-
     // Create a new Drive entry
-    const newDrive = new mongoose.model("Drive", DriveSchema)({
-      username: username.trim(),
-      type: type.trim(),
-      date: data.date || new Date(), // Use provided date or current date
-      abstract: abstract.trim(),
-      location: location.trim(),
-    });
-
+    const newDrive = new Drive(data);
     // Save the drive to the database
     const result = await newDrive.save();
 
     // Return success response
-    return res.status(201).json({
+    return res.status(200).json({
       message: "Drive added successfully",
       drive: result,
     });
   } catch (error) {
     console.error("Drive insertion error:", error);
-
     // Return error response
     return res.status(500).json({
       message: "Server issue while adding drive",
@@ -180,7 +172,7 @@ const LoginHandler = async (data, res) => {
 const postComplaintHandler = async (data) => {
   try {
     const newComplaint = new Complaint(data);
-    const result = await newComplaint.save();
+    const result = await newComplaint.save();//  ← Save to MongoDB (triggers collection creation if needed)
     return { message: "Successfully inserted data", result };
   } catch (error) {
     console.error("Error inserting data:", error);

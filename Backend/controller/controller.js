@@ -19,7 +19,12 @@ const login = async (req, res) => {
 };
 
 const createDrive = async (req, res) => {
-  await driveHandler(req.body, res);
+  try {
+    await driveHandler(req.body, res);
+  } catch (error) {
+    console.error("Drive creation Error:", err);
+    res.status(500).json({ error: err.message });
+  }
 };
 // Signup
 const signup = async (req, res) => {
