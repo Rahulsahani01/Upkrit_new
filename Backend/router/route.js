@@ -11,7 +11,8 @@ const {
   signup, // Middleware for authentication
   protectedRoute,
   logout,
-  createDrive, // Example protected route
+  createDrive, 
+  getDrive
 } = require("../controller/controller");
 const authenticateToken = require("../middlewares/AuthenticateToken");
 
@@ -28,6 +29,7 @@ router.route("/complaint/user/:id").get( authenticateToken ,getComplaintByUserId
 
 // Drive route
 router.route("/drive").post( authenticateToken ,createDrive); // create drive
+router.route("/drive/all").get( authenticateToken ,getDrive); // create drive
 
 // Authentication routes
 router.route("/login").post(login);

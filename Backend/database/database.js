@@ -43,6 +43,7 @@ const Complaint = mongoose.model("Complaint", complaintSchema);
 const Account = mongoose.model("Account", AccountSchema);
 const Drive = mongoose.model("Drive", DriveSchema);
 
+// create drive handler
 const driveHandler = async (data, res) => {
   try {
     // Validate required fields
@@ -69,6 +70,15 @@ const driveHandler = async (data, res) => {
     });
   }
 };
+//get all drive handler
+const getAllDrivesHandler = async () => {
+  try {
+    return await Drive.find().populate('user_id', '-password -__v');
+  } catch (error) {
+    console.error("Drive fetch error:", error);
+  }
+};
+
 
 // Signup Handler
 const SignupHandler = async (data, res) => {
@@ -200,4 +210,5 @@ const getComplaintsByUserIdHandler = async (userId) => {
   }
 };
 
-module.exports = { postComplaintHandler, getAllComplaintHandler,getComplaintsByUserIdHandler, LoginHandler, SignupHandler, driveHandler };
+
+module.exports = { postComplaintHandler, getAllComplaintHandler,getComplaintsByUserIdHandler, LoginHandler, SignupHandler, driveHandler, getAllDrivesHandler };
