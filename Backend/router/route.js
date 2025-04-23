@@ -24,7 +24,7 @@ router.route("/logout").get(logout);
 // Complaint route
 router.route("/complaint").post( authenticateToken ,postComplaint); // route to post complaint 
 router.route("/complaint/all").get( authenticateToken ,getAllComplaint); // route to get complaint
-router.route("/complaint//user/:id").get( authenticateToken ,getComplaintByUserId); // get complaint by user id
+router.route("/complaint/user/:id").get( authenticateToken ,getComplaintByUserId); // get complaint by user id
 
 // Authentication routes
 router.route("/login").post(login);
