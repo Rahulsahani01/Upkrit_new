@@ -2,6 +2,7 @@ const express = require("express");
 const {
   postComplaintHandler,
   getAllComplaintHandler,
+  getComplaintsByUserIdHandler,
   LoginHandler,
   SignupHandler,
   driveHandler,
@@ -25,7 +26,7 @@ const signup = async (req, res) => {
   await SignupHandler(req.body, res); // Passing `res` for token setting
 };
 
-// Complaint
+// post Complaint
 const postComplaint = async (req, res) => {
   try {
     const result = await postComplaintHandler(req.body);
@@ -35,6 +36,7 @@ const postComplaint = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+// get all complaint
 const getAllComplaint = async (req, res) => {
   try {
     const result = await getAllComplaintHandler(req.body);
@@ -44,6 +46,18 @@ const getAllComplaint = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+// get all complaint by user id
+const getComplaintByUserId = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const complaints = await getComplaintsByUserIdHandler(userId);
+    res.status(200).json({ message: "Fetched complaints for user", complaints });
+  } catch (error) {
+    console.error("Error fetching user complaints:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 // Middleware for JWT Verification
 
@@ -73,6 +87,7 @@ module.exports = {
   signup,
   getAllComplaint,
   postComplaint,
+  getComplaintByUserId,
   protectedRoute,
   logout,
   createDrive,
