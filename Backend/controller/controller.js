@@ -6,6 +6,7 @@ const {
   LoginHandler,
   SignupHandler,
   driveHandler,
+  getAllDrivesHandler
 } = require("../database/database");
 
 // Routes Handlers
@@ -17,7 +18,13 @@ const about = (req, res) => res.send("This is the about API route.");
 const login = async (req, res) => {
   await LoginHandler(req.body, res); // Passing `res` for token setting
 };
+// Signup
+const signup = async (req, res) => {
+  await SignupHandler(req.body, res); // Passing `res` for token setting
+};
 
+// ================================================controller for drive feature
+//post complaint 
 const createDrive = async (req, res) => {
   try {
     await driveHandler(req.body, res);
@@ -26,11 +33,18 @@ const createDrive = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-// Signup
-const signup = async (req, res) => {
-  await SignupHandler(req.body, res); // Passing `res` for token setting
+//get all drives
+const getDrive = async (req, res) => {
+  try {
+    const drives = await getAllDrivesHandler();
+    res.status(200).json(drives);
+  } catch (error) {
+    console.error("Drive fetching Error:", error);
+    res.status(500).json({ error: error.message });
+  }
 };
 
+// ================================================controller for complaint feature
 // post Complaint
 const postComplaint = async (req, res) => {
   try {
@@ -96,4 +110,5 @@ module.exports = {
   protectedRoute,
   logout,
   createDrive,
+  getDrive
 };
